@@ -2,18 +2,19 @@
   int Ri = 11;
   int Bi = 9;
   
-  int autoOut = 0;
-  int teleopOut = 1;
-  int warningOut = 2;
+  int bit0 = 0;
+  int bit1 = 1;
+  int bit2 = 2;
   
 void setup() {
   
 }
 
 void loop_debug() {
-  
+  //debug mode that links each digital input with a color channel if things are
+  //not working as they should
 
-  if (digitalRead(autoOut) == HIGH)
+  if (digitalRead(bit0) == HIGH)
   {
      analogWrite(Ri,255); 
   }
@@ -21,7 +22,7 @@ void loop_debug() {
   {
     analogWrite(Ri,0);
   }   
-  if (digitalRead(teleopOut) == HIGH)
+  if (digitalRead(bit1) == HIGH)
   {
      analogWrite(Gi,255); 
   }
@@ -29,7 +30,7 @@ void loop_debug() {
   {
     analogWrite(Gi,0);
   }   
-  if (digitalRead(warningOut) == HIGH)
+  if (digitalRead(bit2) == HIGH)
   {
      analogWrite(Bi,255); 
   }
@@ -44,7 +45,9 @@ void loop()
   
 
 
-  if (digitalRead(autoOut) == HIGH && digitalRead(teleopOut) == LOW && digitalRead(warningOut) == LOW) {
+  if (digitalRead(bit0) == HIGH && digitalRead(bit1) == LOW && digitalRead(bit2) == LOW) {
+    //rainbow mode that switches colors every 100 milleseconds, occurs during autonomous mode
+    
       analogWrite(Ri, 255);
       analogWrite(Gi, 0);
       analogWrite(Bi, 0);
@@ -71,7 +74,8 @@ void loop()
       delay(100);
   }
 
- else if (digitalRead(autoOut) == LOW && digitalRead(teleopOut) == HIGH && digitalRead(warningOut) == LOW) {
+ else if (digitalRead(bit0) == LOW && digitalRead(bit1) == HIGH && digitalRead(bit2) == LOW) {
+   //pulse of red that occurs during teleop while we are on the red alliance
       for (int i = 1; i <255; i++) {
       analogWrite(Ri, i);
       analogWrite(Gi, 0);
@@ -85,7 +89,8 @@ void loop()
       delay(3);
       }  
   }
- else if (digitalRead(autoOut) == HIGH && digitalRead(teleopOut) == HIGH && digitalRead(warningOut) == LOW) {
+ else if (digitalRead(bit0) == HIGH && digitalRead(bit1) == HIGH && digitalRead(bit2) == LOW) {
+   //pulse of blue that occurs during teleop while we are on the blue alliance
       for (int i = 1; i <255; i++) {
       analogWrite(Ri, 0);
       analogWrite(Gi, 0);
@@ -99,7 +104,8 @@ void loop()
       delay(3);
       } 
   }
-  else if (digitalRead(autoOut) == LOW && digitalRead(teleopOut) == LOW && digitalRead(warningOut) == HIGH) {
+  else if (digitalRead(bit0) == LOW && digitalRead(bit1) == LOW && digitalRead(bit2) == HIGH) {
+    //pulse of yellow then blue that occurs while disabled
       for (int i = 1; i <255; i++) {
       analogWrite(Ri, i);
       analogWrite(Gi, i);
@@ -125,7 +131,8 @@ void loop()
       delay(3);
       } 
   }
-  else if (digitalRead(autoOut) == LOW && digitalRead(teleopOut) == HIGH && digitalRead(warningOut) == HIGH) {
+  else if (digitalRead(bit0) == LOW && digitalRead(bit1) == HIGH && digitalRead(bit2) == HIGH) {
+    //pulse of yellow that occurs in the last 20 sec. of teleop
       for (int i = 1; i <255; i+=2) {
       analogWrite(Ri, i);
       analogWrite(Gi, i);
@@ -139,7 +146,7 @@ void loop()
       delay(1);
       }
   } 
-  else if (digitalRead(autoOut) == LOW && digitalRead(teleopOut) == LOW && digitalRead(warningOut) == LOW) {
+  else if (digitalRead(bit0) == LOW && digitalRead(bit1) == LOW && digitalRead(bit2) == LOW) {
       analogWrite(Ri, 0);
       analogWrite(Gi, 0);
       analogWrite(Bi, 0);
