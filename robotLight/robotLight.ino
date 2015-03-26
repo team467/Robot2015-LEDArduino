@@ -1,42 +1,42 @@
-#define GREEN_CHANNEL = 10;
-#define RED_CHANNEL = 11;
-#define BLUE_CHANNEL = 9;
+#define GREEN_CHANNEL  10
+#define RED_CHANNEL 11
+#define BLUE_CHANNEL 9
 
 void setup() 
 {
   
 }
 
-void loop_debug() 
-{
-    //debug mode that links each digital input with a color channel if things are
-    //not working as they should
-
-    if (digitalRead(autoOut) == HIGH)
-    {
-        analogWrite(Ri,255); 
-    }
-    else
-    {
-        analogWrite(Ri,0);
-    }   
-    if (digitalRead(teleopOut) == HIGH)
-    {
-        analogWrite(Gi,255); 
-    }
-    else
-    {
-        analogWrite(Gi,0);
-    }   
-    if (digitalRead(warningOut) == HIGH)
-    {
-        analogWrite(Bi,255); 
-    }
-    else
-    {
-        analogWrite(Bi,0);
-    }
-}
+//void loop_debug() 
+//{
+//    //debug mode that links each digital input with a color channel if things are
+//    //not working as they should
+//
+//    if (digitalRead(autoOut) == HIGH)
+//    {
+//        analogWrite(Ri,255); 
+//    }
+//    else
+//    {
+//        analogWrite(Ri,0);
+//    }   
+//    if (digitalRead(teleopOut) == HIGH)
+//    {
+//        analogWrite(Gi,255); 
+//    }
+//    else
+//    {
+//        analogWrite(Gi,0);
+//    }   
+//    if (digitalRead(warningOut) == HIGH)
+//    {
+//        analogWrite(Bi,255); 
+//    }
+//    else
+//    {
+//        analogWrite(Bi,0);
+//    }
+//}
 
 /* 
  * Set the LED strip to the specified RGB values
@@ -56,10 +56,10 @@ void RGBWrite(int red, int green, int blue)
  * delay - delay in milliseconds to wait
  *
  */
-void RGBWriteDelay(int red, int green, int blue, int delay)
+void RGBWriteDelay(int red, int green, int blue, int delayMS)
 {
     RGBWrite(red, green, blue);
-    delay(delay);
+    delay(delayMS);
 }
 
 /*
@@ -68,7 +68,7 @@ void RGBWriteDelay(int red, int green, int blue, int delay)
  * The input red, green and blue values should be 0 or 1
  *
  */
-void RGBPulse(int red, int green, int blue)
+void RGBPulse(float red, float green, float blue)
 {
     for (int i = 1; i < 255; i++) 
     {
@@ -90,7 +90,7 @@ void RGBPulse(int red, int green, int blue)
  * The input red, green and blue values should be 0 or 1
  *
  */
-void RGBFastPulse(int red, int green, int blue)
+void RGBFastPulse(float red, float green, float blue)
 {
     for (int i = 1; i < 255; i+=2) 
     {
@@ -111,26 +111,27 @@ void RGBFastPulse(int red, int green, int blue)
  * robot code
  *
  */
-typedef enum 
+ enum LEDMode
 {
     OFF           = 0,
     RAINBOW       = 1,
     PULSE_RED     = 2,
     PULSE_BLUE    = 3,
     BLUE_AND_GOLD = 4,
-    YELLOW        = 6,
-} LEDMode;
+    YELLOW        = 6
+};
 
 /*
  * Different modes are encoded into 3 digital output channels from the RoboRio
  * map these to the enum
  *
  */
-LEDMode readInput()
+int readInput()
 {
-    int b0 = (digitalRead(0) == HIGH) ? 0x01 | 0;
-    int b1 = (digitalRead(1) == HIGH) ? 0x02 | 0;
-    int b2 = (digitalRead(2) == HIGH) ? 0x04 | 0;
+  enum LEDMode m = OFF;
+    int b0 = (digitalRead(0) == HIGH) ? 0x01 : 0;
+    int b1 = (digitalRead(1) == HIGH) ? 0x02 : 0;
+    int b2 = (digitalRead(2) == HIGH) ? 0x04 : 0;
 
     return ( b0 | b1 | b2);
 }
@@ -159,7 +160,7 @@ void loop()
             break;
 
         case BLUE_AND_GOLD:
-            RGBPulse(1, 1, 0);  // Pulse Yellow
+            RGBPulse(1, 0.84, 0);  // Pulse Yellow
             RGBPulse(0, 0, 1);  // Pulse Blue
             break;
 
