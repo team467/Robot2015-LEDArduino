@@ -50,19 +50,6 @@ void RGBWrite(int red, int green, int blue)
 }
 
 /*
- * set a given RGB color then wait for the specified delay
- * 
- * red, green, blue - bytes in range 0 to 255
- * delay - delay in milliseconds to wait
- *
- */
-void RGBWriteDelay(int red, int green, int blue, int delayMS)
-{
-    RGBWrite(red, green, blue);
-    delay(delayMS);
-}
-
-/*
  * pulse the given color
  *
  * The input red, green and blue values should be 0 or 1
@@ -113,13 +100,34 @@ void RGBFastPulse(float red, float green, float blue)
  */
  enum LEDMode
 {
-    OFF           = 0,
-    RAINBOW       = 1,
-    PULSE_RED     = 2,
-    PULSE_BLUE    = 3,
-    BLUE_AND_GOLD = 4,
-    YELLOW        = 6
+
+    // Active
+    OFF          = 0,
+    AUTONOMOUS   = 1,
+    TEAM_RED     = 2,
+    TEAM_BLUE    = 3,
+    NO_TEAM      = 4,
+    DISABLED     = 5,
+    TIME_IS_UP   = 6
 };
+
+void rainbow()
+{
+    //rainbow mode that switches colors every 100 milleseconds
+    
+    RGBWrite(255, 0, 0); // Red
+    delay(100);
+    RGBWrite(255, 255, 0); // Yellow
+    delay(100);
+    RGBWrite(0, 255, 0); // Green
+    delay(100);
+    RGBWrite(0, 255, 255); // Cyan
+    delay(100);     
+    RGBWrite(0, 0, 255); // Blue
+    delay(100);
+    RGBWrite(255, 0, 255); // Magenta
+    delay(100);
+}
 
 /*
  * Different modes are encoded into 3 digital output channels from the RoboRio
@@ -140,31 +148,29 @@ void loop()
 {
     switch (readInput())
     {
-        case RAINBOW:
-            //rainbow mode that switches colors every 100 milleseconds
-    
-            RGBWriteDelay(255, 0, 0, 100);    // Red for 100 ms
-            RGBWriteDelay(255, 255, 0, 100);  // Yellow for 100ms
-            RGBWriteDelay(0, 255, 0, 100);    // Green for 100ms
-            RGBWriteDelay(0, 255, 255, 100);  // Cyan for 100ms     
-            RGBWriteDelay(0, 0, 255, 100);    // Blue for 100ms
-            RGBWriteDelay(255, 0, 255, 100);  // Magenta for 100ms
+        case AUTONOMOUS:
+            rainbow();
             break;
 
-        case PULSE_RED:
+        case TEAM_RED:
             RGBPulse(1, 0, 0);  // Pulse Red
             break;
 
-        case PULSE_BLUE:
+        case TEAM_BLUE:
             RGBPulse(0, 0, 1);  // Pulse Blue
             break;
 
-        case BLUE_AND_GOLD:
+        case NO_TEAM:
             RGBPulse(1, 0.84, 0);  // Pulse Yellow
             RGBPulse(0, 0, 1);  // Pulse Blue
             break;
 
-        case YELLOW:
+        case DISABLED:
+            RGBPulse(1, 0.84, 0);  // Pulse Yellow
+            RGBPulse(0, 0, 1);  // Pulse Blue
+            break;
+
+        case TIME_IS_UP:
             RGBFastPulse(1, 1, 0);  // Pulse Yellow
             break;
 
