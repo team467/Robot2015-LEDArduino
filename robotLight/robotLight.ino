@@ -114,11 +114,16 @@ void RGBFastPulse(float red, float green, float blue)
  enum LEDMode
 {
     OFF           = 0,
-    RAINBOW       = 1,
-    PULSE_RED     = 2,
-    PULSE_BLUE    = 3,
-    BLUE_AND_GOLD = 4,
-    YELLOW        = 6
+    RAINBOW       = 11,
+    PULSE_RED     = 12,
+    PULSE_BLUE    = 13,
+    BLUE_AND_GOLD = 14,
+    YELLOW        = 16
+    REESES_PIECES = 1,
+    PULSE_ORANGE  = 2,
+    PULSE_PURPLE  = 3,
+    CANDY_CORN    = 4,
+    WHITE        = 6
 };
 
 /*
@@ -160,13 +165,36 @@ void loop()
             break;
 
         case BLUE_AND_GOLD:
-            RGBPulse(1, 0.84, 0);  // Pulse Yellow
+            RGBPulse(1, 1, 0);  // Pulse Yellow
             RGBPulse(0, 0, 1);  // Pulse Blue
             break;
 
         case YELLOW:
             RGBFastPulse(1, 1, 0);  // Pulse Yellow
             break;
+
+        case REESES_PIECES:
+            RGBWriteDelay(255, 165, 0, 100);   // Orange for 100ms
+            RGBWriteDelay(255, 255, 0, 100);   // Yellow for 100ms
+            RGBWriteDelay(255, 165, 0, 100);   // Brown for 100ms
+            break;
+
+        case PULSE_ORANGE:
+            RGBPulse(1, 0.6, 0);
+            break;
+
+        case PULSE_PURPLE:
+            RGBPulse(0.5, 0, 0.5);
+            break;
+
+        case CANDY_CORN:
+            RGBFastPulse(1, 1, 0);  // Pulse Yellow
+            RGBFastPulse(1, 0.6, 0); // Pulse Orange
+            RGBFastPulse(1, 1, 1); // Pulse White
+            break;
+
+        case WHITE:
+            RGBFastPulse(1, 1, 1);
 
         default:
             RGBWrite(0, 0, 0);
